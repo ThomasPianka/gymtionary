@@ -1,8 +1,14 @@
 import { fetchSkills } from "@/app/lib/data";
 import Link from "next/link";
 
-export default async function SkillsTable({ currentPage }: { currentPage: number }) {
-  const skills = await fetchSkills(currentPage);
+export default async function SkillsTable({
+  query,
+  currentPage
+}: {
+  query: string;
+  currentPage: number;
+}) {
+  const skills = await fetchSkills(query, currentPage);
 
   return (
     <div>
@@ -28,7 +34,7 @@ export default async function SkillsTable({ currentPage }: { currentPage: number
           {skills?.map(skill => (
             <tr
               key={skill._id.toString()}
-              className="relative w-full border-b py-3 text-base last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-300"
+              className="relative w-full border-b py-3 text-base last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-200"
             >
               <td className="whitespace-nowrap py-3 pl-6">
                 <Link

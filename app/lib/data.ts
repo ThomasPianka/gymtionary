@@ -1,5 +1,6 @@
 import connection from "@/app/lib/mongodb";
 import { ObjectId } from "mongodb";
+import { unstable_noStore as noStore } from "next/cache";
 
 const ITEMS_PER_PAGE = 4;
 
@@ -38,13 +39,18 @@ const skills = [
   }
 ];
 
-export async function fetchPageCount() {
+export async function fetchPageCount(query: string) {
+  noStore();
   try {
     const client = await connection;
     const count = await client.db("gymtionary")
       .collection("skills")
-      .countDocuments()
-    return Math.ceil(count / ITEMS_PER_PAGE);
+      .aggregate([
+        { $match: { name: { $regex: `${query}`, $options: 'i' } } },
+        { $count: "total" }
+      ])
+      .toArray();
+    return count.length == 0 ? 0 : Math.ceil(count[0].total / ITEMS_PER_PAGE);
     // return Math.ceil(skills.length / ITEMS_PER_PAGE)
   } catch (error) {
     console.error("Database Error:", error);
@@ -52,15 +58,17 @@ export async function fetchPageCount() {
   }
 }
 
-export async function fetchSkills(currentPage: number) {
+export async function fetchSkills(query: string, currentPage: number) {
+  noStore();
   try {
     const client = await connection;
     const data = await client.db("gymtionary")
       .collection("skills")
       .aggregate([
+        { $match: { name: { $regex: `${query}`, $options: 'i' } } },
         { $sort: { name: 1 } },
         { $skip: (currentPage - 1) * ITEMS_PER_PAGE },
-        { $limit: ITEMS_PER_PAGE },
+        { $limit: ITEMS_PER_PAGE }
       ])
       .toArray();
     return data;
