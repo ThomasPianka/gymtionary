@@ -1,8 +1,10 @@
 import { fetchPageCount } from "@/app/lib/data";
 import Pagination from "@/app/ui/pagination";
 import Search from "@/app/ui/search";
+import { TableSkeleton } from "@/app/ui/skeletons";
 import Table from "@/app/ui/table";
 import { Metadata } from "next";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "Skills List"
@@ -31,7 +33,9 @@ export default async function Home({
               <Search placeholder="Search invoices..." />
             </div>
             <div className="mt-2">
-              <Table query={query} currentPage={currentPage} />
+              <Suspense key={query + currentPage} fallback={<TableSkeleton />}>
+                <Table query={query} currentPage={currentPage} />
+              </Suspense>
             </div>
             <div className="mt-5 flex w-full justify-center">
               <Pagination totalPages={totalPages} />
