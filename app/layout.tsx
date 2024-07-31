@@ -3,6 +3,8 @@ import { inter } from "@/app/ui/fonts";
 import "@/app/globals.css";
 import TopNav from "@/app/ui/topnav";
 
+export const experimental_ppr = true;
+
 export const metadata: Metadata = {
   title: {
     template: "%s | Gymtionary",

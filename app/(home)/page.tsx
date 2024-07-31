@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   title: "Skills List"
 }
 
-export default async function Home({
+export default async function Page({
   searchParams
 }: {
   searchParams?: {

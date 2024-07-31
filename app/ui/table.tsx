@@ -1,4 +1,6 @@
 import { fetchSkills } from "@/app/lib/data";
+import { FavoriteButton, favorites } from "@/app/ui/favorites/buttons";
+import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
 export default async function SkillsTable({
@@ -9,6 +11,8 @@ export default async function SkillsTable({
   currentPage: number;
 }) {
   const skills = await fetchSkills(query, currentPage);
+
+  // console.log(favorites);
 
   return (
     <div>
@@ -25,24 +29,30 @@ export default async function SkillsTable({
         ))}
       </div>
       <table className="hidden min-w-full text-gray-900 md:table">
-        {/* <thead className="rounded-lg text-left text-lg font-normal">
-          <tr>
-            <th scope="col" className="px-4 py-5 font-medium sm:pl-6">Name</th>
-          </tr>
-        </thead> */}
         <tbody className="bg-white">
           {skills?.map(skill => (
             <tr
               key={skill._id.toString()}
-              className="relative w-full border-b py-3 text-base last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg hover:bg-gray-200"
+              className="relative w-full border-b py-3 text-base last-of-type:border-none [&:first-child>td:first-child]:rounded-tl-lg [&:first-child>td:last-child]:rounded-tr-lg [&:last-child>td:first-child]:rounded-bl-lg [&:last-child>td:last-child]:rounded-br-lg"
             >
               <td className="whitespace-nowrap py-3 pl-6">
-                <Link
-                  href={`${skill._id.toString()}`}
-                  className="after:absolute after:inset-0"
-                >
-                  {skill.name}
-                </Link>
+                <div className="flex justify-between items-center">
+                  {/* <Link
+                    href={`${skill._id.toString()}`}
+                    // className="after:absolute after:inset-0"
+                  > */}
+                    {skill.name}
+                  {/* </Link> */}
+                  <div className="flex justify-between items-center mr-2 space-x-2">
+                    <FavoriteButton name={skill.name}/>
+                  <Link 
+                    href={`${skill._id.toString()}`}
+                    className="rounded-md transition-transform hover:translate-x-[3px]"
+                  >
+                    <ChevronDoubleRightIcon className="w-8"/>
+                  </Link>
+                  </div>
+                </div>
               </td>
             </tr>
           ))}
