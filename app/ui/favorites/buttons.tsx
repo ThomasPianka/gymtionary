@@ -2,12 +2,11 @@
 
 import { StarIcon } from "@heroicons/react/24/outline";
 import clsx from "clsx";
-import { useEffect } from "react";
-
-export const favorites = global?.window !== undefined ? window.localStorage.getItem("gymtionary-favorites") : [];
-let array: any = [];
+import { useEffect, useState } from "react";
 
 export function FavoriteButton({ name }: { name: string }) {
+  const [favorites, setFavorites] = useState<string[]>([]);
+
   function click(name: string) {
     if (window !== undefined) {
       const savedArray = window.localStorage.getItem("gymtionary-favorites");
@@ -19,14 +18,14 @@ export function FavoriteButton({ name }: { name: string }) {
         favorites.unshift(name);
       }
       window.localStorage.setItem("gymtionary-favorites", JSON.stringify(favorites));
+      setFavorites(favorites);
     }
   }
 
   useEffect(() => {
-    array = window.localStorage.getItem("gymtionary-favorites") !== null ? window.localStorage.getItem("gymtionary-favorites") : [];
-  });
-
-  console.log(array);
+    const array: any = window.localStorage.getItem("gymtionary-favorites") !== null ? window.localStorage.getItem("gymtionary-favorites") : [];
+    setFavorites(array);
+  }, []);
 
   return (
     <button
@@ -39,7 +38,9 @@ export function FavoriteButton({ name }: { name: string }) {
         className={clsx(
           "w-8",
           {
-            "fill-yellow-300": array.includes(name)
+            "fill-yellow-300": favorites.includes(name),
+            "hover:fill-none": favorites.includes(name),
+            "hover:fill-yellow-300": !favorites.includes(name)
           }
         )}
       />

@@ -1,5 +1,5 @@
 import { fetchSkills } from "@/app/lib/data";
-import { FavoriteButton, favorites } from "@/app/ui/favorites/buttons";
+import { FavoriteButton } from "@/app/ui/favorites/buttons";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
 
@@ -11,8 +11,6 @@ export default async function SkillsTable({
   currentPage: number;
 }) {
   const skills = await fetchSkills(query, currentPage);
-
-  // console.log(favorites);
 
   return (
     <div>
@@ -37,20 +35,15 @@ export default async function SkillsTable({
             >
               <td className="whitespace-nowrap py-3 pl-6">
                 <div className="flex justify-between items-center">
-                  {/* <Link
-                    href={`${skill._id.toString()}`}
-                    // className="after:absolute after:inset-0"
-                  > */}
-                    {skill.name}
-                  {/* </Link> */}
+                  {skill.name}
                   <div className="flex justify-between items-center mr-2 space-x-2">
                     <FavoriteButton name={skill.name}/>
-                  <Link 
-                    href={`${skill._id.toString()}`}
-                    className="rounded-md transition-transform hover:translate-x-[3px]"
-                  >
-                    <ChevronDoubleRightIcon className="w-8"/>
-                  </Link>
+                    <Link
+                      href={`${skill._id.toString()}`}
+                      className="rounded-md transition-transform hover:translate-x-[3px]"
+                    >
+                      <ChevronDoubleRightIcon className="w-8"/>
+                    </Link>
                   </div>
                 </div>
               </td>
